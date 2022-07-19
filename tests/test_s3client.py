@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from typing import List
-from boto3_type_annotations import s3
+from mypy_boto3_s3.service_resource import ObjectSummary
 from charon.storage import S3Client, CHECKSUM_META_KEY
 from charon.utils.archive import extract_zip_all
 from charon.utils.files import overwrite_file, read_sha1
@@ -153,7 +153,7 @@ class S3ClientTest(BaseTest):
             product="apache-commons", root=root
         )
 
-        def content_check(products: List[str], objs: List[s3.ObjectSummary]):
+        def content_check(products: List[str], objs: List[ObjectSummary]):
             self.assertEqual(COMMONS_LANG3_ZIP_ENTRY, len(objs))
             for o in objs:
                 obj = o.Object()

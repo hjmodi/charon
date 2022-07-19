@@ -25,7 +25,7 @@ from charon.constants import PROD_INFO_SUFFIX
 from charon.pkgs.pkg_utils import is_metadata
 from charon.storage import PRODUCT_META_KEY, CHECKSUM_META_KEY
 from tests.commons import TEST_BUCKET, TEST_MANIFEST_BUCKET
-from boto3_type_annotations import s3
+from mypy_boto3_s3.service_resource import Bucket, ObjectSummary
 from moto import mock_s3
 
 
@@ -115,7 +115,7 @@ class PackageBaseTest(BaseTest):
     def __prepare_s3(self):
         return boto3.resource('s3')
 
-    def check_product(self, file: str, prods: List[str], bucket: s3.Bucket = None, msg=None):
+    def check_product(self, file: str, prods: List[str], bucket: Bucket = None, msg=None):
         prod_file = file + PROD_INFO_SUFFIX
         test_bucket = bucket
         if not test_bucket:
@@ -128,7 +128,7 @@ class PackageBaseTest(BaseTest):
             msg=msg
         )
 
-    def check_content(self, objs: List[s3.ObjectSummary], products: List[str], msg=None):
+    def check_content(self, objs: List[ObjectSummary], products: List[str], msg=None):
         for obj in objs:
             file_obj = obj.Object()
             test_bucket = self.mock_s3.Bucket(file_obj.bucket_name)
