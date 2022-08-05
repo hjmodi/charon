@@ -1,9 +1,9 @@
-PYTHON ?= python3.6
+PYTHON ?= python3.9
 VERSION := $(shell $(PYTHON) setup.py --version)
 
 VENV_BASE ?= /var/lib/charon/venv
 
-VENV_BOOTSTRAP ?= pip==21.3.1 setuptools==59.6.0 wheel==0.37.1
+VENV_BOOTSTRAP ?= pip==22.2.2 setuptools==63.4.1 wheel==0.37.1
 
 NAME ?= charon
 

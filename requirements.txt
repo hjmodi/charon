@@ -8,5 +8,5 @@ requests==2.27.1
 ruamel.yaml==0.17.20
 defusedxml==0.7.1
 subresource-integrity==0.2
-pip==21.3.1
+pip==22.2.2
 wheel==0.37.1
