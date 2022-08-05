@@ -13,14 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-
-# !/usr/bin/env python
-
-import re
+import os
 
 from setuptools import setup, find_packages
-
-version = "1.1.1"
 
 # f = open('README.md')
 # long_description = f.read().strip()
@@ -34,22 +29,41 @@ in future. And Ronda service will be hosted in AWS S3.
 """
 
 
-def _get_requirements(path):
-    try:
-        with open(path, encoding="utf-8") as f:
-            packages = f.read().splitlines()
-    except (IOError, OSError) as ex:
-        raise RuntimeError(f"Can't open file with requirements: {ex}") from ex
-    packages = (p.strip() for p in packages if not re.match(r'^\s*#', p))
-    packages = list(filter(None, packages))
-    return packages
+def use_scm_version():
+    return False if version_file() else True
 
+
+def get_version_from_file():
+    vf = version_file()
+    if vf:
+        with open(vf, 'r') as file:
+            return file.read().strip()
+
+
+def version_file():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    version_file = os.path.join(current_dir, 'VERSION')
+
+    if os.path.exists(version_file):
+        return version_file
+
+def setup_requires():
+    if version_file():
+        return []
+    else:
+        return ['setuptools_scm']
+
+
+extra_setup_args = {}
+if not version_file():
+    extra_setup_args.update(dict(use_scm_version=dict(root="..", relative_to=__file__), setup_requires=setup_requires()))
 
 setup(
-    zip_safe=True,
     name="charon",
-    version=version,
+    version=get_version_from_file(),
     long_description=long_description,
+    include_package_data=True,
+    python_requires=">=3.6",
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
@@ -62,9 +76,9 @@ setup(
     author="RedHat EXD SPMM",
     license="APLv2",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
-    install_requires=_get_requirements('requirements.txt'),
     test_suite="tests",
     entry_points={
         "console_scripts": ["charon = charon:cli"],
     },
+    **extra_setup_args,
 )
