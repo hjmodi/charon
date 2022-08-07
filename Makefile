@@ -40,16 +40,19 @@ virtualenv:
 		if [ ! -d "$(VENV_BASE)/charon" ]; then \
 			$(PYTHON) -m venv $(VENV_BASE)/charon; \
 			$(VENV_BASE)/charon/bin/pip install $(PIP_OPTIONS) $(VENV_BOOTSTRAP); \
+			$(VENV_BASE)/charon/bin/pip config set global.index https://repository.engineering.redhat.com/nexus/repository/pypi.org/pypi; \
+			$(VENV_BASE)/charon/bin/pip config set global.index_url https://repository.engineering.redhat.com/nexus/repository/pypi.org/simple; \
+			$(VENV_BASE)/charon/bin/pip config set global.trusted-host repository.engineering.redhat.com; \
 		fi; \
 	fi
 
 # Install third-party requirements needed for charon's environment.
 # this does not use system site packages intentionally
 requirements_charon: virtualenv
-	$(VENV_BASE)/charon/bin/pip install $(PIP_OPTIONS) -r requirements.txt
+	$(VENV_BASE)/charon/bin/pip install -r requirements.txt
 
 requirements_charon_dev: virtualenv
-	$(VENV_BASE)/charon/bin/pip install $(PIP_OPTIONS) -r requirements-dev.txt
+	$(VENV_BASE)/charon/bin/pip install -r requirements-dev.txt
 
 requirements: requirements_charon
 
