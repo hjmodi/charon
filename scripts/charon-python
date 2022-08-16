@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Enable Charon virtualenv
-for venv_path in /var/lib/charon/venv/charon; do
+for venv_path in /opt/charon/venv/charon; do
   if [ -f $venv_path/bin/activate ]; then
     . $venv_path/bin/activate
   fi
